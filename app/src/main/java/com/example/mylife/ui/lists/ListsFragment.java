@@ -15,6 +15,8 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.mylife.R;
 import com.example.mylife.data.Todo;
@@ -27,7 +29,7 @@ import java.util.ArrayList;
 public class ListsFragment extends Fragment {
 
     private ArrayList<Todo> list;
-    private ArrayAdapter<Todo> adapter;
+    private TodoAdapter adapter;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -35,15 +37,16 @@ public class ListsFragment extends Fragment {
 
         getActivity().setTitle("Lists");
 
-        ListView lv = root.findViewById(R.id.todosListView);
+        RecyclerView rv = root.findViewById(R.id.todosListView);
+        rv.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         list = new ArrayList<>();
-        for(int i=0; i<30; i++){
+        for(int i=0; i<1000; i++){
             list.add(new Todo("Hello"+i));
         }
 
-        adapter = new TodoAdapter(getActivity(), R.layout.todo_item, list);
-        lv.setAdapter(adapter);
+        adapter = new TodoAdapter(list);
+        rv.setAdapter(adapter);
 
 
         FloatingActionButton fab = root.findViewById(R.id.fab);
@@ -65,6 +68,7 @@ public class ListsFragment extends Fragment {
 
     public void createList(String name) {
         Toast.makeText(getActivity(), "\"" + name + "\" created !", Toast.LENGTH_SHORT).show();
-        adapter.add(new Todo(name));
+        list.add(new Todo(name));
+        adapter.notifyItemInserted(list.size() - 1);
     }
 }
