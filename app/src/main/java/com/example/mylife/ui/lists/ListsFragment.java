@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.annotation.NonNull;
@@ -49,13 +50,21 @@ public class ListsFragment extends Fragment {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                openDialog();
             }
         });
 
         return root;
 
+    }
 
+    public void openDialog(){
+        AddListDialog addListDialog = new AddListDialog();
+        addListDialog.show(getActivity().getSupportFragmentManager(), "New List Dialog");
+    }
+
+    public void createList(String name) {
+        Toast.makeText(getActivity(), "\"" + name + "\" created !", Toast.LENGTH_SHORT).show();
+        adapter.add(new Todo(name));
     }
 }

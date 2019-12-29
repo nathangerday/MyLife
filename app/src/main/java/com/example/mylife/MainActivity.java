@@ -3,6 +3,7 @@ package com.example.mylife;
 import android.os.Bundle;
 
 import com.example.mylife.ui.filter.FilterFragment;
+import com.example.mylife.ui.lists.AddListDialog;
 import com.example.mylife.ui.lists.ListsFragment;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
@@ -29,7 +30,7 @@ import androidx.appcompat.widget.Toolbar;
 import android.view.Menu;
 import android.widget.Toast;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, AddListDialog.AddListDialogListener {
 
     private DrawerLayout drawer;
 
@@ -94,4 +95,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         return true;
     }
+
+    @Override
+    public void createList(String name) {
+        ListsFragment lf = (ListsFragment)getSupportFragmentManager().findFragmentById(R.id.fragment_container);
+        lf.createList(name);
+    }
+
 }
