@@ -97,6 +97,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.nav_backup:
                 Snackbar.make(findViewById(R.id.drawer_layout), "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
+                Toast.makeText(this, "HelloWorld", Toast.LENGTH_LONG).show();
                 break;
         }
         drawer.closeDrawer(GravityCompat.START);
