@@ -32,6 +32,7 @@ public class TodosActivity extends AppCompatActivity implements AddTodoDialog.Ad
         setContentView(R.layout.activity_todos);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         Bundle extras = getIntent().getExtras();
         if(extras != null){
