@@ -4,32 +4,24 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.Nullable;
 import androidx.annotation.NonNull;
-import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.mylife.R;
-import com.example.mylife.data.Todo;
-import com.example.mylife.ui.TodoAdapter;
+import com.example.mylife.data.TodoList;
+import com.example.mylife.utils.AppStateManager;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class ListsFragment extends Fragment {
 
-    private ArrayList<Todo> list;
-    private TodoAdapter adapter;
+    private List<TodoList> list;
+    private TodoListAdapter adapter;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -40,14 +32,9 @@ public class ListsFragment extends Fragment {
         RecyclerView rv = root.findViewById(R.id.todosListView);
         rv.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        list = new ArrayList<>();
-        for(int i=0; i<1000; i++){
-            list.add(new Todo("Hello"+i));
-        }
-
-        adapter = new TodoAdapter(list);
+        list = AppStateManager.listsOfTodos;
+        adapter = new TodoListAdapter(list, getActivity());
         rv.setAdapter(adapter);
-
 
         FloatingActionButton fab = root.findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -68,7 +55,9 @@ public class ListsFragment extends Fragment {
 
     public void createList(String name) {
         Toast.makeText(getActivity(), "\"" + name + "\" created !", Toast.LENGTH_SHORT).show();
-        list.add(new Todo(name));
+        list.add(new TodoList(name));
         adapter.notifyItemInserted(list.size() - 1);
     }
+
+
 }

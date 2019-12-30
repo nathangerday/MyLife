@@ -1,4 +1,4 @@
-package com.example.mylife.ui.lists;
+package com.example.mylife.ui.todos;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -17,17 +17,17 @@ import androidx.appcompat.app.AppCompatDialogFragment;
 
 import com.example.mylife.R;
 
-public class AddListDialog extends AppCompatDialogFragment {
+public class AddTodoDialog extends AppCompatDialogFragment {
 
-    private EditText newListName;
-    private AddListDialogListener listener;
+    private EditText newTodoName;
+    private AddTodoDialogListener listener;
 
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
 
         try {
-            listener = (AddListDialogListener)context;
+            listener = (AddTodoDialogListener)context;
         } catch (ClassCastException e) {
             throw new ClassCastException(context.toString() + " must implement AddTodoDialogListener");
         }
@@ -38,11 +38,11 @@ public class AddListDialog extends AppCompatDialogFragment {
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
 
         LayoutInflater inflater = getActivity().getLayoutInflater();
-        View view = inflater.inflate(R.layout.add_list_dialog, null);
+        View view = inflater.inflate(R.layout.add_todo_dialog, null);
 
         final AlertDialog dialog = new AlertDialog.Builder(getActivity())
                 .setView(view)
-                .setTitle("New List")
+                .setTitle("New Task")
                 .setNegativeButton("Cancel", null)
                 .setPositiveButton("Add", null)
                 .create();
@@ -57,14 +57,14 @@ public class AddListDialog extends AppCompatDialogFragment {
 
                     @Override
                     public void onClick(View view) {
-                        String name = newListName.getText().toString();
+                        String name = newTodoName.getText().toString();
 
                         if(name.isEmpty()){
                             Toast.makeText(getActivity(), "No name entered", Toast.LENGTH_SHORT).show();
                             return;
                         }
 
-                        listener.createList(newListName.getText().toString());
+                        listener.createTodo(newTodoName.getText().toString());
 
                         //Dismiss once everything is OK.
                         dialog.dismiss();
@@ -73,11 +73,11 @@ public class AddListDialog extends AppCompatDialogFragment {
             }
         });
 
-        newListName = view.findViewById(R.id.edit_list_name);
+        newTodoName = view.findViewById(R.id.edit_todo_name);
         return dialog;
     }
 
-    public interface AddListDialogListener{
-        void createList(String name);
+    public interface AddTodoDialogListener {
+        void createTodo(String name);
     }
 }

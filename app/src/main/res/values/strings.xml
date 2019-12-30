@@ -12,4 +12,7 @@
     <string name="menu_backup">Backup</string>
 
     <string name="new_list_hint">Enter your list name</string>
+    <string name="new_todo_hint">Enter your task name</string>
+
+    <string name="title_activity_todos">TodosActivity</string>
 </resources>

@@ -5,6 +5,7 @@ import android.os.Bundle;
 import com.example.mylife.ui.filter.FilterFragment;
 import com.example.mylife.ui.lists.AddListDialog;
 import com.example.mylife.ui.lists.ListsFragment;
+import com.example.mylife.utils.AppStateManager;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -41,6 +42,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        AppStateManager.loadData(getFilesDir());
 
         drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
@@ -102,4 +105,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         lf.createList(name);
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        AppStateManager.saveData(getFilesDir());
+    }
 }

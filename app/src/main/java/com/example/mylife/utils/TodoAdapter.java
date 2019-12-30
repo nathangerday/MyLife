@@ -1,18 +1,13 @@
-package com.example.mylife.ui;
+package com.example.mylife.utils;
 
-import android.content.Context;
 import android.graphics.Paint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.mylife.R;
@@ -33,7 +28,7 @@ public class TodoAdapter extends RecyclerView.Adapter<TodoAdapter.ViewHolder> {
 
         public ViewHolder(View v) {
             super(v);
-            this.name = v.findViewById(R.id.todoName);
+            this.name = v.findViewById(R.id.todo_name);
 
             this.checkbox = v.findViewById(R.id.checkbox);
         }
@@ -86,48 +81,5 @@ public class TodoAdapter extends RecyclerView.Adapter<TodoAdapter.ViewHolder> {
     public Todo get(int position) {
         return todos.get(position);
     }
-
-//    @NonNull
-//    @Override
-//    public View getView(final int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-//        if (convertView == null){
-//            convertView = createView();
-//        }
-//
-//        final Todo todo = get(position);
-//        ViewHolder holder = (ViewHolder)convertView.getTag();
-//        holder.position = position;
-//
-//        holder.name.setText(todo.name);
-//        if (todo.done){
-//            holder.name.setPaintFlags(Paint.STRIKE_THRU_TEXT_FLAG);
-//        } else {
-//            holder.name.setPaintFlags(0);
-//        }
-//        holder.checkbox.setChecked(todo.done);
-//
-//        return convertView;
-//    }
-//
-//    private View createView(){
-//        View convertView = LayoutInflater.from(getContext()).inflate(this.layoutRessource, null);
-//
-//        final ViewHolder holder = new ViewHolder();
-//        convertView.setTag(holder);
-//
-//        holder.name = convertView.findViewById(R.id.todoName);
-//        holder.checkbox = convertView.findViewById(R.id.checkbox);
-//
-//        holder.checkbox.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Todo todo = todos.get(holder.position);
-//                todo.done = !todo.done;
-//                notifyDataSetChanged();
-//            }
-//        });
-//
-//        return convertView;
-//    }
 
 }

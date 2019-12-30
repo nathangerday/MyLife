@@ -1,6 +1,8 @@
 package com.example.mylife.data;
 
-public class Todo {
+import java.io.Serializable;
+
+public class Todo implements Serializable {
     public String name;
     public boolean done;
 

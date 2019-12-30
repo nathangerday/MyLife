@@ -6,10 +6,10 @@
 
 
     <EditText
-        android:id="@+id/edit_list_name"
+        android:id="@+id/edit_todo_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/new_list_hint"
+        android:hint="@string/new_todo_hint"
         android:inputType="text"
         android:maxLines="1"/>
 
