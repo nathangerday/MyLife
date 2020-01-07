@@ -4,13 +4,18 @@ import android.os.Bundle;
 
 import com.example.mylife.data.Todo;
 import com.example.mylife.data.TodoList;
+import com.example.mylife.ui.lists.TodoListAdapter;
 import com.example.mylife.utils.AppStateManager;
+import com.example.mylife.utils.ListsTouchHelper;
 import com.example.mylife.utils.TodoAdapter;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.NavUtils;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -20,7 +25,7 @@ import android.widget.Toast;
 
 import com.example.mylife.R;
 
-public class TodosActivity extends AppCompatActivity implements AddTodoDialog.AddTodoDialogListener {
+public class TodosActivity extends AppCompatActivity implements AddTodoDialog.AddTodoDialogListener, ListsTouchHelper.ListsTouchHelperListener {
 
     private TodoList todos;
     private int todo_index;
@@ -46,9 +51,16 @@ public class TodosActivity extends AppCompatActivity implements AddTodoDialog.Ad
 
         RecyclerView rv = findViewById(R.id.todosView);
         rv.setLayoutManager(new LinearLayoutManager(this));
+        rv.setItemAnimator(new DefaultItemAnimator());
+        rv.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
 
         adapter = new TodoAdapter(todos.todolist);
         rv.setAdapter(adapter);
+
+        ItemTouchHelper.SimpleCallback itemTouchHelperCallback = new ListsTouchHelper<TodoListAdapter.ViewHolder>(0, ItemTouchHelper.LEFT, this);
+        new ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(rv);
+
+
         adapter.notifyDataSetChanged();
 
         FloatingActionButton fab = findViewById(R.id.fab);
@@ -58,6 +70,19 @@ public class TodosActivity extends AppCompatActivity implements AddTodoDialog.Ad
                 openDialog();
             }
         });
+    }
+
+    @Override
+    public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction, int position){
+        if(viewHolder instanceof TodoAdapter.ViewHolder){
+            String name = this.todos.todolist.get(viewHolder.getAdapterPosition()).name;
+
+            final Todo deleted = this.todos.todolist.get(viewHolder.getAdapterPosition());
+            final int deletedPosition = viewHolder.getAdapterPosition();
+
+            this.adapter.removeItem(viewHolder.getAdapterPosition());
+
+        }
     }
 
     public void openDialog(){

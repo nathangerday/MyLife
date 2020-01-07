@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -13,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.mylife.R;
 import com.example.mylife.data.TodoList;
 import com.example.mylife.ui.todos.TodosActivity;
+import com.example.mylife.utils.ListItemWithBGViewHolder;
 
 import java.util.List;
 
@@ -22,15 +24,28 @@ public class TodoListAdapter extends RecyclerView.Adapter<TodoListAdapter.ViewHo
     private final List<TodoList> lists;
     private final Context context;
 
-    public static class ViewHolder extends RecyclerView.ViewHolder{
+    public static class ViewHolder extends RecyclerView.ViewHolder implements ListItemWithBGViewHolder {
         int position;
         public View view;
         public TextView name;
+        public RelativeLayout foreground, background;
 
         public ViewHolder(View v) {
             super(v);
             this.view = v;
             this.name = v.findViewById(R.id.list_name);
+            this.foreground = v.findViewById(R.id.list_item_foreground);
+            this.background = v.findViewById(R.id.list_item_background);
+        }
+
+        @Override
+        public RelativeLayout getBackground() {
+            return background;
+        }
+
+        @Override
+        public RelativeLayout getForeground(){
+            return foreground;
         }
     }
 
@@ -43,6 +58,16 @@ public class TodoListAdapter extends RecyclerView.Adapter<TodoListAdapter.ViewHo
     @Override
     public int getItemCount() {
         return lists.size();
+    }
+
+    public void removeItem(int position){
+        this.lists.remove(position);
+        notifyItemRemoved(position);
+    }
+
+    public void restoreItem(TodoList item, int position){
+        this.lists.add(position, item);
+        notifyItemInserted(position);
     }
 
     @Override

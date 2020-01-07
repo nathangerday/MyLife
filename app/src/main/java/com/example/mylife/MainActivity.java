@@ -6,6 +6,7 @@ import com.example.mylife.ui.filter.FilterFragment;
 import com.example.mylife.ui.lists.AddListDialog;
 import com.example.mylife.ui.lists.ListsFragment;
 import com.example.mylife.utils.AppStateManager;
+import com.example.mylife.utils.ListsTouchHelper;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 

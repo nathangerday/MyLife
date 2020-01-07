@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -12,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.mylife.R;
 import com.example.mylife.data.Todo;
+import com.example.mylife.data.TodoList;
 
 import java.util.List;
 
@@ -21,16 +23,28 @@ public class TodoAdapter extends RecyclerView.Adapter<TodoAdapter.ViewHolder> {
     private final List<Todo> todos;
 
 
-    public static class ViewHolder extends RecyclerView.ViewHolder{
+    public static class ViewHolder extends RecyclerView.ViewHolder implements ListItemWithBGViewHolder{
         int position;
         public TextView name;
         public CheckBox checkbox;
+        public RelativeLayout foreground, background;
 
         public ViewHolder(View v) {
             super(v);
             this.name = v.findViewById(R.id.todo_name);
-
             this.checkbox = v.findViewById(R.id.checkbox);
+            this.foreground = v.findViewById(R.id.todo_item_foreground);
+            this.background = v.findViewById(R.id.todo_item_background);
+        }
+
+        @Override
+        public RelativeLayout getBackground() {
+            return background;
+        }
+
+        @Override
+        public RelativeLayout getForeground(){
+            return foreground;
         }
     }
 
@@ -42,6 +56,16 @@ public class TodoAdapter extends RecyclerView.Adapter<TodoAdapter.ViewHolder> {
     @Override
     public int getItemCount() {
         return todos.size();
+    }
+
+    public void removeItem(int position){
+        this.todos.remove(position);
+        notifyItemRemoved(position);
+    }
+
+    public void restoreItem(Todo item, int position){
+        this.todos.add(position, item);
+        notifyItemInserted(position);
     }
 
     @Override
