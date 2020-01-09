@@ -9,9 +9,17 @@
             android:icon="@drawable/ic_menu_camera"
             android:title="@string/menu_lists" />
         <item
-            android:id="@+id/nav_filters"
+            android:id="@+id/nav_filter_high"
             android:icon="@drawable/ic_menu_gallery"
-            android:title="@string/menu_filter" />
+            android:title="@string/menu_filter_high" />
+        <item
+            android:id="@+id/nav_filter_medium"
+            android:icon="@drawable/ic_menu_gallery"
+            android:title="@string/menu_filter_medium" />
+        <item
+            android:id="@+id/nav_filter_low"
+            android:icon="@drawable/ic_menu_gallery"
+            android:title="@string/menu_filter_low" />
     </group>
 
     <item android:title="Tools">

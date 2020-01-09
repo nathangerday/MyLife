@@ -5,8 +5,10 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <ListView
-        android:id="@+id/todosListFilterView"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/filterListView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"/>
 </LinearLayout>

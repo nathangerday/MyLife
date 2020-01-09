@@ -7,8 +7,10 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -17,7 +19,7 @@ import androidx.appcompat.app.AppCompatDialogFragment;
 
 import com.example.mylife.R;
 
-public class AddTodoDialog extends AppCompatDialogFragment {
+public class AddTodoDialog extends AppCompatDialogFragment implements AdapterView.OnItemSelectedListener {
 
     private EditText newTodoName;
     private AddTodoDialogListener listener;
@@ -73,8 +75,21 @@ public class AddTodoDialog extends AppCompatDialogFragment {
             }
         });
 
+        Spinner spinner = getActivity().findViewById(R.id.priority_spinner);
+        spinner.setOnItemSelectedListener(this);
+
         newTodoName = view.findViewById(R.id.edit_todo_name);
         return dialog;
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+
     }
 
     public interface AddTodoDialogListener {

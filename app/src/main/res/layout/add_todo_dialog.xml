@@ -11,7 +11,35 @@
         android:layout_height="wrap_content"
         android:hint="@string/new_todo_hint"
         android:inputType="text"
-        android:maxLines="1"/>
+        android:maxLines="1"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"/>
+
+    <TextView
+        android:id="@+id/priority_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/edit_todo_name"
+        android:layout_marginEnd="0dp"
+        android:layout_alignParentLeft="true"
+        android:padding="16dp"
+        android:text="Priority :"/>
+        <!--android:layout_below="@id/edit_todo_name"-->
+
+
+    <Spinner
+        android:id="@+id/priority_spinner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/edit_todo_name"
+        android:layout_toRightOf="@id/priority_text"
+        android:padding="16dp"
+        android:layout_centerVertical="true"
+        android:entries="@array/priorities"/>
+
+    <!--android:layout_below="@+id/edit_todo_name"
+    android:layout_toRightOf="@+id/priority_text"
+    -->
 
 
 </RelativeLayout>

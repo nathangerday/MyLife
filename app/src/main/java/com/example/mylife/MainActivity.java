@@ -7,6 +7,7 @@ import com.example.mylife.ui.lists.AddListDialog;
 import com.example.mylife.ui.lists.ListsFragment;
 import com.example.mylife.utils.AppStateManager;
 import com.example.mylife.utils.ListsTouchHelper;
+import com.example.mylife.utils.Priority;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -86,8 +87,26 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.nav_lists:
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ListsFragment()).commit();
                 break;
-            case R.id.nav_filters:
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FilterFragment()).commit();
+            case R.id.nav_filter_high:
+                FilterFragment filter_high =  new FilterFragment();
+                Bundle args = new Bundle();
+                args.putInt("priority", Priority.HIGH.ordinal());
+                filter_high.setArguments(args);
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, filter_high).commit();
+                break;
+            case R.id.nav_filter_medium:
+                FilterFragment filter_medium =  new FilterFragment();
+                Bundle args2 = new Bundle();
+                args2.putInt("priority", Priority.MERIUM.ordinal());
+                filter_medium.setArguments(args2);
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, filter_medium).commit();
+                break;
+            case R.id.nav_filter_low:
+                FilterFragment filter_low =  new FilterFragment();
+                Bundle args3 = new Bundle();
+                args3.putInt("priority", Priority.LOW.ordinal());
+                filter_low.setArguments(args3);
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, filter_low).commit();
                 break;
             case R.id.nav_backup:
                 Snackbar.make(findViewById(R.id.drawer_layout), "Replace with your own action", Snackbar.LENGTH_LONG)
