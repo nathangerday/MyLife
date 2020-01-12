@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -18,11 +19,15 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatDialogFragment;
 
 import com.example.mylife.R;
+import com.example.mylife.utils.Priority;
+
+import java.util.ArrayList;
 
 public class AddTodoDialog extends AppCompatDialogFragment implements AdapterView.OnItemSelectedListener {
 
     private EditText newTodoName;
     private AddTodoDialogListener listener;
+    private Priority currentPriority = Priority.NONE;
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -66,7 +71,7 @@ public class AddTodoDialog extends AppCompatDialogFragment implements AdapterVie
                             return;
                         }
 
-                        listener.createTodo(newTodoName.getText().toString());
+                        listener.createTodo(newTodoName.getText().toString(), currentPriority);
 
                         //Dismiss once everything is OK.
                         dialog.dismiss();
@@ -75,7 +80,9 @@ public class AddTodoDialog extends AppCompatDialogFragment implements AdapterVie
             }
         });
 
-        Spinner spinner = getActivity().findViewById(R.id.priority_spinner);
+        Spinner spinner = view.findViewById(R.id.priority_spinner);
+        ArrayList<String> priorities_list = new ArrayList<>();
+        //spinner.setAdapter(new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, priorities_list));
         spinner.setOnItemSelectedListener(this);
 
         newTodoName = view.findViewById(R.id.edit_todo_name);
@@ -84,7 +91,20 @@ public class AddTodoDialog extends AppCompatDialogFragment implements AdapterVie
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
+        switch (position){
+            case 0:
+                this.currentPriority = Priority.NONE;
+                break;
+            case 1:
+                this.currentPriority = Priority.HIGH;
+                break;
+            case 2:
+                this.currentPriority = Priority.MEDIUM;
+                break;
+            case 3:
+                this.currentPriority = Priority.LOW;
+                break;
+        }
     }
 
     @Override
@@ -93,6 +113,6 @@ public class AddTodoDialog extends AppCompatDialogFragment implements AdapterVie
     }
 
     public interface AddTodoDialogListener {
-        void createTodo(String name);
+        void createTodo(String name, Priority priority);
     }
 }

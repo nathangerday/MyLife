@@ -97,7 +97,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.nav_filter_medium:
                 FilterFragment filter_medium =  new FilterFragment();
                 Bundle args2 = new Bundle();
-                args2.putInt("priority", Priority.MERIUM.ordinal());
+                args2.putInt("priority", Priority.MEDIUM.ordinal());
                 filter_medium.setArguments(args2);
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, filter_medium).commit();
                 break;

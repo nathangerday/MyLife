@@ -1,10 +1,10 @@
 package com.example.mylife.utils;
 
 public enum Priority {
+    NONE,
     HIGH,
-    MERIUM,
-    LOW,
-    NONE
+    MEDIUM,
+    LOW
 }
 
 

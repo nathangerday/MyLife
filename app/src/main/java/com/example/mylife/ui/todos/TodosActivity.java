@@ -91,9 +91,10 @@ public class TodosActivity extends AppCompatActivity implements AddTodoDialog.Ad
         addTodoDialog.show(getSupportFragmentManager(), "New Todo Dialog");
     }
 
-    public void createTodo(String name){
+    @Override
+    public void createTodo(String name, Priority priority){
         Toast.makeText(this, "\"" + name + "\" created !", Toast.LENGTH_SHORT).show();
-        todos.todolist.add(new Todo(name));
+        todos.todolist.add(new Todo(name, priority));
         adapter.notifyItemInserted(todos.todolist.size() - 1);
     }
 

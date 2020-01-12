@@ -18,9 +18,9 @@
 
     <string name="title_activity_todos">TodosActivity</string>
     <string-array name="priorities">
+        <item>None</item>
         <item>High</item>
         <item>Medium</item>
         <item>Low</item>
-        <item>None</item>
     </string-array>
 </resources>
