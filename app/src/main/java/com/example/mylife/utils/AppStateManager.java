@@ -42,7 +42,7 @@ public class AppStateManager {
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
-
+/*
         if(listsOfTodos.isEmpty()){
             listsOfTodos.add(new TodoList("General"));
             listsOfTodos.get(0).todolist.add(new Todo("Enjoy your life"));
@@ -65,7 +65,7 @@ public class AppStateManager {
             listsOfTodos.get(3).todolist.add(new Todo("Concoillote"));
             listsOfTodos.get(3).todolist.add(new Todo("Jeux"));
 
-        }
+        }*/
     }
 
 }

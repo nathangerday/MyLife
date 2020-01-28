@@ -1,5 +1,7 @@
 package com.example.mylife.utils;
 
+import android.content.Context;
+import android.content.Intent;
 import android.graphics.Paint;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -7,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -14,6 +17,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.mylife.R;
 import com.example.mylife.data.Todo;
 import com.example.mylife.data.TodoList;
+import com.example.mylife.ui.todos.TodosActivity;
+import com.example.mylife.ui.totodetail.TodoDetailActivity;
 
 import java.util.List;
 
@@ -21,6 +26,7 @@ import java.util.List;
 public class TodoAdapter extends RecyclerView.Adapter<TodoAdapter.ViewHolder> {
 
     private final List<Todo> todos;
+    private final Context context;
 
 
     public static class ViewHolder extends RecyclerView.ViewHolder implements ListItemWithBGViewHolder{
@@ -28,9 +34,11 @@ public class TodoAdapter extends RecyclerView.Adapter<TodoAdapter.ViewHolder> {
         public TextView name;
         public CheckBox checkbox;
         public RelativeLayout foreground, background;
+        public View view;
 
         public ViewHolder(View v) {
             super(v);
+            this.view = v;
             this.name = v.findViewById(R.id.todo_name);
             this.checkbox = v.findViewById(R.id.checkbox);
             this.foreground = v.findViewById(R.id.todo_item_foreground);
@@ -49,8 +57,9 @@ public class TodoAdapter extends RecyclerView.Adapter<TodoAdapter.ViewHolder> {
     }
 
 
-    public TodoAdapter(@NonNull List<Todo> todos) {
+    public TodoAdapter(@NonNull List<Todo> todos, Context context) {
         this.todos = todos;
+        this.context = context;
     }
 
     @Override
@@ -96,6 +105,12 @@ public class TodoAdapter extends RecyclerView.Adapter<TodoAdapter.ViewHolder> {
                 t.done = !t.done;
                 notifyDataSetChanged();
             }
+        });
+        vh.view.setOnClickListener((v) -> {
+            Intent intent = new Intent(context, TodoDetailActivity.class);
+            intent.putExtra("todo_index", vh.position);
+            intent.putExtra("todolist_name", get(vh.position).parentList.name);
+            context.startActivity(intent);
         });
         return vh;
 

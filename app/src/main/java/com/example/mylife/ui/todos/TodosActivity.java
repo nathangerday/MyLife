@@ -55,7 +55,7 @@ public class TodosActivity extends AppCompatActivity implements AddTodoDialog.Ad
         rv.setItemAnimator(new DefaultItemAnimator());
         rv.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
 
-        adapter = new TodoAdapter(todos.todolist);
+        adapter = new TodoAdapter(todos.todolist, this);
         rv.setAdapter(adapter);
 
         ItemTouchHelper.SimpleCallback itemTouchHelperCallback = new ListsTouchHelper<TodoListAdapter.ViewHolder>(0, ItemTouchHelper.LEFT, this);
@@ -91,10 +91,9 @@ public class TodosActivity extends AppCompatActivity implements AddTodoDialog.Ad
         addTodoDialog.show(getSupportFragmentManager(), "New Todo Dialog");
     }
 
-    @Override
     public void createTodo(String name, Priority priority){
         Toast.makeText(this, "\"" + name + "\" created !", Toast.LENGTH_SHORT).show();
-        todos.todolist.add(new Todo(name, priority));
+        todos.todolist.add(new Todo(name, priority, todos));
         adapter.notifyItemInserted(todos.todolist.size() - 1);
     }
 

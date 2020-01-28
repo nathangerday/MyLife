@@ -58,7 +58,7 @@ public class FilterFragment extends Fragment implements ListsTouchHelper.ListsTo
             }
         }
 
-        adapter = new TodoAdapter(todoWithPriority);
+        adapter = new TodoAdapter(todoWithPriority, getActivity());
         rv.setAdapter(adapter);
 
         ItemTouchHelper.SimpleCallback itemTouchHelperCallback = new ListsTouchHelper<TodoAdapter.ViewHolder>(0, ItemTouchHelper.LEFT, this);
