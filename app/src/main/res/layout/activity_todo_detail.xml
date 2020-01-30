@@ -12,6 +12,7 @@
         android:layout_height="wrap_content"
         android:theme="@style/AppTheme.AppBarOverlay"
         android:id="@+id/appbar">
+
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
@@ -26,5 +27,46 @@
         android:layout_height="wrap_content"
         android:text="Todo Title"
         android:textAlignment="center"
-        android:id="@+id/todo_title"/>
+        android:id="@+id/todo_title" />
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/deadline_display"
+            android:text="No deadline set yet"
+            android:layout_marginLeft="30dp"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"></TextView>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Change Deadline"
+            android:layout_marginRight="10dp"
+            android:layout_alignParentRight="true"
+            android:id="@+id/deadline_button"
+            android:onClick="changeDeadline"></Button>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"
+            android:text="Take Picture"
+            android:onClick="takePicture"/>
+
+    </RelativeLayout>
+
+
 </LinearLayout>
