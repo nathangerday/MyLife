@@ -26,6 +26,7 @@ import com.example.mylife.utils.AlarmReceiver;
 import com.example.mylife.utils.AppStateManager;
 
 import java.util.Calendar;
+import java.util.concurrent.TimeUnit;
 
 public class TodoDetailActivity extends AppCompatActivity {
 
@@ -83,8 +84,14 @@ public class TodoDetailActivity extends AppCompatActivity {
 
                                 //TODO May need to create another Calendar instance to stora selected date and pass it to alarm manager
                                 // alarmManager.set(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), pendingIntent);
-                                alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 5000, pendingIntent);
-                                Toast.makeText(this, "Alarm set in " + 5 + " seconds", Toast.LENGTH_LONG).show();
+                                Calendar alarm = Calendar.getInstance();
+                                alarm.set(year, monthOfYear, dayOfMonth, hourOfDay, minute, 0);
+                                long timeDifference = alarm.getTimeInMillis() - System.currentTimeMillis();
+                                alarmManager.setExact(AlarmManager.RTC_WAKEUP, alarm.getTimeInMillis(), pendingIntent);
+                                Toast.makeText(this, "Alarm set in " + String.format("%02d hours, %02d min",
+                                        TimeUnit.MILLISECONDS.toHours(timeDifference),
+                                        TimeUnit.MILLISECONDS.toMinutes(timeDifference) % 60
+                                ), Toast.LENGTH_LONG).show();
 
                             }, mHour, mMinute, false);
                     timePickerDialog.show();
