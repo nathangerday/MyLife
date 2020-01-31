@@ -47,9 +47,9 @@ public class AlarmReceiver extends BroadcastReceiver {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_ID)
                 .setSmallIcon(R.drawable.ic_launcher_foreground)
                 .setContentTitle("Deadline")
-                .setContentText("\""+todoName+"\""+"from \""+todolistName+"\"")
+                .setContentText("\""+todoName+"\""+" from \""+todolistName+"\"")
                 .setStyle(new NotificationCompat.BigTextStyle()
-                        .bigText("\""+todoName+"\""+"from \""+todolistName+"\""))
+                        .bigText("\""+todoName+"\""+" from \""+todolistName+"\""))
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .setAutoCancel(true);
 
@@ -70,60 +70,5 @@ public class AlarmReceiver extends BroadcastReceiver {
 //        setResultCode(Activity.RESULT_OK);
 
     }
-
-
-
-    public void createNotification(Context context) {
-
-
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, "channel_deadline")
-                .setSmallIcon(android.R.drawable.ic_dialog_alert)
-                .setContentTitle("It is prayer time")
-                .setContentText("Prayer")
-                .setSmallIcon(R.mipmap.ic_launcher)
-                .setSubText("Tab to cancel the ringtone")
-                .setPriority(NotificationCompat.PRIORITY_HIGH);
-
-
-        //To add a dismiss button
-        Intent dismissIntent = new Intent(context, RingtonePlayingService.class);
-        dismissIntent.setAction(RingtonePlayingService.ACTION_DISMISS);
-
-        PendingIntent pendingIntent = PendingIntent.getService(context,
-                123, dismissIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-        NotificationCompat.Action action = new NotificationCompat.Action
-                (android.R.drawable.ic_lock_idle_alarm, "DISMISS", pendingIntent);
-        builder.addAction(action);
-        // end of setting action button to notification
-
-
-        Intent intent1 = new Intent(context, MainActivity.class);
-        PendingIntent pIntent = PendingIntent.getActivity(context, 123, intent1,
-                PendingIntent.FLAG_UPDATE_CURRENT);
-        builder.setContentIntent(pIntent);
-
-
-        NotificationManager notificationManager = (NotificationManager)
-                context.getSystemService(NOTIFICATION_SERVICE);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationChannel notificationChannel = new NotificationChannel("channel_deadline", "My Notifications", NotificationManager.IMPORTANCE_HIGH);
-
-            // Configure the notification channel.
-            notificationChannel.setDescription("Channel description");
-            notificationChannel.enableLights(true);
-            notificationChannel.setLightColor(Color.RED);
-            notificationChannel.setVibrationPattern(new long[]{0, 1000, 500, 1000});
-            notificationChannel.enableVibration(true);
-            notificationManager.createNotificationChannel(notificationChannel);
-        }
-
-
-        Notification notification = builder.build();
-        notification.flags |= Notification.FLAG_AUTO_CANCEL;
-        notificationManager.notify(123, notification);
-
-
-    }
-
 
 }

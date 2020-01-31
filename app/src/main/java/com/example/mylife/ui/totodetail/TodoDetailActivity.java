@@ -12,10 +12,15 @@ import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
@@ -25,6 +30,7 @@ import com.example.mylife.data.TodoList;
 import com.example.mylife.utils.AlarmReceiver;
 import com.example.mylife.utils.AppStateManager;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.concurrent.TimeUnit;
 
@@ -34,6 +40,8 @@ public class TodoDetailActivity extends AppCompatActivity {
     private TodoList parent = null;
     private PendingIntent pendingIntent;
     private AlarmManager alarmManager;
+    private TextView alarmtext;
+    private SimpleDateFormat sdf;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +49,9 @@ public class TodoDetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_todo_detail);
 
         createNotificationChannel();
+
+        sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+
 
         alarmManager = (AlarmManager)getSystemService(ALARM_SERVICE);
 
@@ -60,6 +71,19 @@ public class TodoDetailActivity extends AppCompatActivity {
         }
 
         EditText todotitle = findViewById(R.id.todo_title);
+        alarmtext = findViewById(R.id.deadline_display);
+        if(todo.isDeadline()){
+            alarmtext.setText(sdf.format(todo.getDeadline().getTime()));
+        }
+
+
+        todotitle.setOnEditorActionListener((v, actionId, event) -> {
+            if ((event != null && (event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) || (actionId == EditorInfo.IME_ACTION_DONE)) {
+                todo.name = todotitle.getText().toString();
+                todotitle.clearFocus();
+            }
+            return false;
+        });
         todotitle.setText(todo.name);
     }
 
@@ -73,17 +97,19 @@ public class TodoDetailActivity extends AppCompatActivity {
 
         DatePickerDialog datePickerDialog = new DatePickerDialog(this,
                 (view1, year, monthOfYear, dayOfMonth) -> {
-                    //TODO Store date
 
                     TimePickerDialog timePickerDialog = new TimePickerDialog(this,
                             (view2, hourOfDay, minute) -> {
+                                if(this.todo.isDeadline()){
+                                    cancelAlarm();
+                                }
+
                                 Intent myIntent = new Intent(this, AlarmReceiver.class);
                                 myIntent.putExtra("todo_name", this.todo.name);
                                 myIntent.putExtra("todolist_name", this.parent.name);
-                                pendingIntent = PendingIntent.getBroadcast(this, 0, myIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+                                pendingIntent = PendingIntent.getBroadcast(this, 1122, myIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-                                //TODO May need to create another Calendar instance to stora selected date and pass it to alarm manager
-                                // alarmManager.set(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), pendingIntent);
+
                                 Calendar alarm = Calendar.getInstance();
                                 alarm.set(year, monthOfYear, dayOfMonth, hourOfDay, minute, 0);
                                 long timeDifference = alarm.getTimeInMillis() - System.currentTimeMillis();
@@ -93,6 +119,11 @@ public class TodoDetailActivity extends AppCompatActivity {
                                         TimeUnit.MILLISECONDS.toMinutes(timeDifference) % 60
                                 ), Toast.LENGTH_LONG).show();
 
+
+                                alarmtext.setText(sdf.format(alarm.getTime()));
+
+
+                                this.todo.setDeadline(alarm);
                             }, mHour, mMinute, false);
                     timePickerDialog.show();
                 }, mYear, mMonth, mDay);
@@ -107,6 +138,19 @@ public class TodoDetailActivity extends AppCompatActivity {
 
     }
 
+    public void removeDeadline(View view){
+        cancelAlarm();
+        alarmtext.setText(R.string.no_alarm);
+    }
+
+
+
+
+    @Override
+    public void onBackPressed(){
+        setResult(RESULT_OK);
+        finish();
+    }
 
     private void createNotificationChannel() {
         // Create the NotificationChannel, but only on API 26+ because
@@ -119,5 +163,14 @@ public class TodoDetailActivity extends AppCompatActivity {
             NotificationManager notificationManager = getSystemService(NotificationManager.class);
             notificationManager.createNotificationChannel(channel);
         }
+    }
+
+    private void cancelAlarm(){
+        Intent myIntent = new Intent(this, AlarmReceiver.class);
+        myIntent.putExtra("todo_name", this.todo.name);
+        myIntent.putExtra("todolist_name", this.parent.name);
+        pendingIntent = PendingIntent.getBroadcast(this, 1122, myIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        alarmManager.cancel(pendingIntent);
+        todo.removeDeadline();
     }
 }

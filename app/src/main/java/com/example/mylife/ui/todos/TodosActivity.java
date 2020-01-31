@@ -1,5 +1,6 @@
 package com.example.mylife.ui.todos;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.example.mylife.data.Todo;
@@ -95,6 +96,15 @@ public class TodosActivity extends AppCompatActivity implements AddTodoDialog.Ad
         Toast.makeText(this, "\"" + name + "\" created !", Toast.LENGTH_SHORT).show();
         todos.todolist.add(new Todo(name, priority, todos));
         adapter.notifyItemInserted(todos.todolist.size() - 1);
+    }
+
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == 1){
+            adapter.notifyDataSetChanged();
+        }
+
+
     }
 
     @Override

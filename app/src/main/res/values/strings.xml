@@ -16,6 +16,8 @@
     <string name="new_list_hint">Enter your list name</string>
     <string name="new_todo_hint">Enter your task name</string>
 
+    <string name="no_alarm">No deadline set</string>
+
     <string name="title_activity_todos">TodosActivity</string>
     <string-array name="priorities">
         <item>None</item>

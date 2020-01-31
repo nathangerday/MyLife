@@ -1,5 +1,6 @@
 package com.example.mylife.utils;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Paint;
@@ -110,12 +111,14 @@ public class TodoAdapter extends RecyclerView.Adapter<TodoAdapter.ViewHolder> {
             Intent intent = new Intent(context, TodoDetailActivity.class);
             intent.putExtra("todo_index", vh.position);
             intent.putExtra("todolist_name", get(vh.position).parentList.name);
-            context.startActivity(intent);
+            ((Activity)context).startActivityForResult(intent, 1);
         });
         return vh;
 
 
     }
+
+
 
     public Todo get(int position) {
         return todos.get(position);

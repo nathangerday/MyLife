@@ -27,7 +27,9 @@
         android:layout_height="wrap_content"
         android:text="Todo Title"
         android:textAlignment="center"
-        android:id="@+id/todo_title" />
+        android:id="@+id/todo_title"
+        android:maxLines="1"
+        android:inputType="text"/>
 
 
     <RelativeLayout
@@ -39,19 +41,32 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/deadline_display"
-            android:text="No deadline set yet"
+            android:text="@string/no_alarm"
             android:layout_marginLeft="30dp"
-            android:layout_alignParentLeft="true"
-            android:layout_centerVertical="true"></TextView>
+            android:layout_centerHorizontal="true"></TextView>
 
-        <Button
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Change Deadline"
-            android:layout_marginRight="10dp"
-            android:layout_alignParentRight="true"
-            android:id="@+id/deadline_button"
-            android:onClick="changeDeadline"></Button>
+            android:layout_below="@+id/deadline_display"
+            android:layout_centerHorizontal="true">
+
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Delete"
+                android:id="@+id/deadline_delete"
+                android:onClick="removeDeadline"/>
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Change"
+                android:layout_marginRight="10dp"
+                android:id="@+id/deadline_button"
+                android:onClick="changeDeadline"></Button>
+        </LinearLayout>
     </RelativeLayout>
 
     <RelativeLayout
