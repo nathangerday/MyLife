@@ -1,87 +1,113 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".ui.totodetail.TodoDetailActivity">
+    android:layout_width="match_parent"
+    android:layout_centerInParent="true">
 
-    <com.google.android.material.appbar.AppBarLayout
+
+    <LinearLayout
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:theme="@style/AppTheme.AppBarOverlay"
-        android:id="@+id/appbar">
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        tools:context=".ui.totodetail.TodoDetailActivity">
 
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
+        <com.google.android.material.appbar.AppBarLayout
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
-            app:popupTheme="@style/AppTheme.PopupOverlay" />
-
-    </com.google.android.material.appbar.AppBarLayout>
-
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Todo Title"
-        android:textAlignment="center"
-        android:id="@+id/todo_title"
-        android:maxLines="1"
-        android:inputType="text"/>
-
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <TextView
-            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/deadline_display"
-            android:text="@string/no_alarm"
-            android:layout_marginLeft="30dp"
-            android:layout_centerHorizontal="true"></TextView>
+            android:theme="@style/AppTheme.AppBarOverlay"
+            android:id="@+id/appbar">
 
-        <LinearLayout
-            android:layout_width="wrap_content"
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="?attr/colorPrimary"
+                app:popupTheme="@style/AppTheme.PopupOverlay" />
+
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <EditText
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/deadline_display"
-            android:layout_centerHorizontal="true">
+            android:text="Todo Title"
+            android:textAlignment="center"
+            android:id="@+id/todo_title"
+            android:maxLines="1"
+            android:inputType="text"/>
 
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Enter details here..."
+            android:id="@+id/todo_description"
+            android:inputType="textMultiLine" />
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/deadline_display"
+                android:text="@string/no_alarm"
+                android:layout_marginLeft="30dp"
+                android:layout_centerHorizontal="true"></TextView>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/deadline_display"
+                android:layout_centerHorizontal="true">
+
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Delete"
+                    android:id="@+id/deadline_delete"
+                    android:onClick="removeDeadline"/>
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Change"
+                    android:layout_marginRight="10dp"
+                    android:id="@+id/deadline_button"
+                    android:onClick="changeDeadline"></Button>
+            </LinearLayout>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Delete"
-                android:id="@+id/deadline_delete"
-                android:onClick="removeDeadline"/>
+                android:layout_centerHorizontal="true"
+                android:text="Take Picture"
+                android:onClick="takePicture"
+                android:id="@+id/button_take_picture"/>
 
-            <Button
-                android:layout_width="wrap_content"
+            <ImageView
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Change"
-                android:layout_marginRight="10dp"
-                android:id="@+id/deadline_button"
-                android:onClick="changeDeadline"></Button>
-        </LinearLayout>
-    </RelativeLayout>
+                android:scaleType="centerCrop"
+                android:layout_centerInParent="true"
+                android:adjustViewBounds="true"
+                android:id="@+id/picture_viewer"
+                android:layout_centerHorizontal="true"
+                android:layout_below="@+id/button_take_picture"/>
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_centerHorizontal="true"
-            android:text="Take Picture"
-            android:onClick="takePicture"/>
-
-    </RelativeLayout>
+        </RelativeLayout>
 
 
-</LinearLayout>
+    </LinearLayout>
+
+</ScrollView>

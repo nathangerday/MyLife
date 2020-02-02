@@ -1,7 +1,5 @@
 package com.example.mylife.data;
 
-import com.example.mylife.utils.Priority;
-
 import java.io.Serializable;
 import java.util.Calendar;
 
@@ -11,13 +9,11 @@ public class Todo implements Serializable {
     public Priority priority;
     public TodoList parentList;
     public long deadline;
+    public String photoPath;
+    public String description;
 
     public Todo(String title) {
-        this.name = title;
-        this.done = false;
-        this.priority = Priority.NONE;
-        this.parentList = null;
-        this.deadline = -1;
+        this(title, Priority.NONE, null);
     }
 
     public Todo(String title, Priority priority, TodoList parentList){
@@ -26,6 +22,8 @@ public class Todo implements Serializable {
         this.priority = priority;
         this.parentList = parentList;
         this.deadline = -1;
+        this.photoPath = null;
+        this.description = "";
     }
 
     public void setDeadline(Calendar c){
@@ -44,6 +42,10 @@ public class Todo implements Serializable {
 
     public boolean isDeadline(){
         return this.deadline >= 0;
+    }
+
+    public boolean isPicture(){
+        return this.photoPath != null;
     }
 
 

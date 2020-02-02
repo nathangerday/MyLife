@@ -8,7 +8,7 @@ import com.example.mylife.data.TodoList;
 import com.example.mylife.ui.lists.TodoListAdapter;
 import com.example.mylife.utils.AppStateManager;
 import com.example.mylife.utils.ListsTouchHelper;
-import com.example.mylife.utils.Priority;
+import com.example.mylife.data.Priority;
 import com.example.mylife.utils.TodoAdapter;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -111,6 +111,6 @@ public class TodosActivity extends AppCompatActivity implements AddTodoDialog.Ad
     protected void onPause() {
         super.onPause();
 
-        AppStateManager.saveData(getFilesDir());
+        AppStateManager.saveData(this);
     }
 }

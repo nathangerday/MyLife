@@ -1,27 +1,23 @@
 package com.example.mylife;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.example.mylife.ui.filter.FilterFragment;
 import com.example.mylife.ui.lists.AddListDialog;
 import com.example.mylife.ui.lists.ListsFragment;
 import com.example.mylife.utils.AppStateManager;
-import com.example.mylife.utils.ListsTouchHelper;
-import com.example.mylife.utils.Priority;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.example.mylife.data.Priority;
 import com.google.android.material.snackbar.Snackbar;
 
-import android.view.Gravity;
+import android.os.Environment;
+import android.os.FileUtils;
+import android.util.Log;
 import android.view.MenuItem;
-import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.core.view.GravityCompat;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-import androidx.navigation.ui.AppBarConfiguration;
-import androidx.navigation.ui.NavigationUI;
 
 import com.google.android.material.navigation.NavigationView;
 
@@ -33,9 +29,17 @@ import androidx.appcompat.widget.Toolbar;
 import android.view.Menu;
 import android.widget.Toast;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, AddListDialog.AddListDialogListener {
 
     private DrawerLayout drawer;
+    private NavigationView navigationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,10 +49,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        AppStateManager.loadData(getFilesDir());
+        AppStateManager.loadData(this);
 
         drawer = findViewById(R.id.drawer_layout);
-        NavigationView navigationView = findViewById(R.id.nav_view);
+        navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar,
@@ -109,13 +113,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, filter_low).commit();
                 break;
             case R.id.nav_backup:
-                Snackbar.make(findViewById(R.id.drawer_layout), "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-                Toast.makeText(this, "HelloWorld", Toast.LENGTH_LONG).show();
+                AppStateManager.backupAndSendMail(this);
+                break;
+            case R.id.nav_backup_local:
+                AppStateManager.backupToStorage(this);
+                break;
+            case R.id.nav_loadbak:
+                AppStateManager.showFileChooser(this);
                 break;
         }
         drawer.closeDrawer(GravityCompat.START);
-
         return true;
     }
 
@@ -129,6 +136,49 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onPause() {
         super.onPause();
 
-        AppStateManager.saveData(getFilesDir());
+        AppStateManager.saveData(this);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        // If the user doesn't pick a file just return
+        if (requestCode != AppStateManager.RESQUEST_FILE_CHOOSER_BAK || resultCode != RESULT_OK) {
+            return;
+        }
+
+        File tmp = new File(getFilesDir(), "tmp");
+
+        try {
+            InputStream in = getContentResolver().openInputStream(data.getData());
+            tmp.deleteOnExit();
+            FileOutputStream out = new FileOutputStream(tmp);
+            copyStream(in, out);
+
+            AppStateManager.loadFromFile(tmp, this);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+        if(AppStateManager.loadFromFile(tmp, this)){
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ListsFragment()).commit();
+            navigationView.setCheckedItem(R.id.nav_lists);
+            Toast.makeText(this, "Backup loaded", Toast.LENGTH_SHORT).show();
+        }else{
+            Toast.makeText(this, "File couldn't be read", Toast.LENGTH_SHORT).show();
+        }
+
+
+    }
+
+    private void copyStream(InputStream in, OutputStream out) throws IOException {
+        byte[] buffer = new byte[1024];
+        int read;
+        while ((read = in.read(buffer)) != -1) {
+            out.write(buffer, 0, read);
+        }
     }
 }

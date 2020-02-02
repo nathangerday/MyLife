@@ -20,6 +20,7 @@ import com.example.mylife.data.Todo;
 import com.example.mylife.data.TodoList;
 import com.example.mylife.ui.todos.TodosActivity;
 import com.example.mylife.ui.totodetail.TodoDetailActivity;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.List;
 
@@ -28,6 +29,10 @@ public class TodoAdapter extends RecyclerView.Adapter<TodoAdapter.ViewHolder> {
 
     private final List<Todo> todos;
     private final Context context;
+
+    private Todo lastDeletedItem;
+    private int lastDeletedItemPosition;
+    private View parent = null;
 
 
     public static class ViewHolder extends RecyclerView.ViewHolder implements ListItemWithBGViewHolder{
@@ -69,13 +74,24 @@ public class TodoAdapter extends RecyclerView.Adapter<TodoAdapter.ViewHolder> {
     }
 
     public void removeItem(int position){
+        lastDeletedItem = this.todos.get(position);
+        lastDeletedItemPosition = position;
         this.todos.remove(position);
         notifyItemRemoved(position);
+        activateUndo();
     }
 
-    public void restoreItem(Todo item, int position){
-        this.todos.add(position, item);
-        notifyItemInserted(position);
+    private void activateUndo(){
+        Snackbar snackbar = Snackbar.make(parent, "\"" +lastDeletedItem.name + "\" deleted",
+                Snackbar.LENGTH_LONG);
+        snackbar.setAction("Undo", v -> undoRemove());
+        snackbar.show();
+    }
+
+    private void undoRemove(){
+        this.todos.add(lastDeletedItemPosition,
+                lastDeletedItem);
+        notifyItemInserted(lastDeletedItemPosition);
     }
 
     @Override
@@ -97,6 +113,7 @@ public class TodoAdapter extends RecyclerView.Adapter<TodoAdapter.ViewHolder> {
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        this.parent = parent;
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.todo_item, parent, false);
         final ViewHolder vh = new ViewHolder(view);
         vh.checkbox.setOnClickListener(new View.OnClickListener() {
@@ -109,6 +126,7 @@ public class TodoAdapter extends RecyclerView.Adapter<TodoAdapter.ViewHolder> {
         });
         vh.view.setOnClickListener((v) -> {
             Intent intent = new Intent(context, TodoDetailActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
             intent.putExtra("todo_index", vh.position);
             intent.putExtra("todolist_name", get(vh.position).parentList.name);
             ((Activity)context).startActivityForResult(intent, 1);

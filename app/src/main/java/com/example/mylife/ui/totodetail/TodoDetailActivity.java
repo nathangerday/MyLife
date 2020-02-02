@@ -2,6 +2,7 @@ package com.example.mylife.ui.totodetail;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NavUtils;
+import androidx.core.content.FileProvider;
 
 import android.app.AlarmManager;
 import android.app.DatePickerDialog;
@@ -10,8 +11,13 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -20,6 +26,7 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -30,11 +37,16 @@ import com.example.mylife.data.TodoList;
 import com.example.mylife.utils.AlarmReceiver;
 import com.example.mylife.utils.AppStateManager;
 
+import java.io.File;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 public class TodoDetailActivity extends AppCompatActivity {
+
+    static final int REQUEST_IMAGE_CAPTURE = 10;
 
     private Todo todo;
     private TodoList parent = null;
@@ -42,6 +54,10 @@ public class TodoDetailActivity extends AppCompatActivity {
     private AlarmManager alarmManager;
     private TextView alarmtext;
     private SimpleDateFormat sdf;
+    private ImageView pictureViewer;
+    private EditText description;
+
+    private String previousPicturePath;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,6 +101,32 @@ public class TodoDetailActivity extends AppCompatActivity {
             return false;
         });
         todotitle.setText(todo.name);
+
+        pictureViewer = findViewById(R.id.picture_viewer);
+
+        updatePicture();
+
+        pictureViewer.setOnClickListener(v -> {
+            if(this.todo.isPicture()){
+                File file = new File(this.todo.photoPath);
+                final Intent intent = new Intent(Intent.ACTION_VIEW)//
+                        .setDataAndType(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N ?
+                                        FileProvider.getUriForFile(this,"com.example.android.fileprovider", file) : Uri.fromFile(file),
+                                "image/*").addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                startActivity(intent);
+            }
+        });
+
+        description = findViewById(R.id.todo_description);
+
+        description.setOnEditorActionListener((v, actionId, event) -> {
+            if ((event != null && (event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) || (actionId == EditorInfo.IME_ACTION_DONE)) {
+                todo.description = description.getText().toString();
+                description.clearFocus();
+            }
+            return false;
+        });
+
     }
 
     public void changeDeadline(View view){
@@ -136,6 +178,35 @@ public class TodoDetailActivity extends AppCompatActivity {
 
     public void takePicture(View view){
 
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+            File photoFile = null;
+            try {
+                photoFile = createImageFile();
+            } catch (IOException ex) {
+                finish();
+            }
+            if (photoFile != null) {
+                Uri photoURI = FileProvider.getUriForFile(this,
+                        "com.example.android.fileprovider",
+                        photoFile);
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                takePictureIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+            }
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(resultCode, resultCode, data);
+        if (requestCode == REQUEST_IMAGE_CAPTURE) {
+            if(resultCode == RESULT_OK){
+                updatePicture();
+            }else if(resultCode == RESULT_CANCELED){
+                this.todo.photoPath = previousPicturePath;
+            }
+        }
     }
 
     public void removeDeadline(View view){
@@ -150,6 +221,14 @@ public class TodoDetailActivity extends AppCompatActivity {
     public void onBackPressed(){
         setResult(RESULT_OK);
         finish();
+    }
+
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        AppStateManager.saveData(this);
     }
 
     private void createNotificationChannel() {
@@ -172,5 +251,37 @@ public class TodoDetailActivity extends AppCompatActivity {
         pendingIntent = PendingIntent.getBroadcast(this, 1122, myIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         alarmManager.cancel(pendingIntent);
         todo.removeDeadline();
+    }
+
+    String currentPhotoPath;
+
+    private File createImageFile() throws IOException {
+        // Create an image file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "JPEG_" + timeStamp + "_";
+        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File image = File.createTempFile(
+                imageFileName,  /* prefix */
+                ".jpg",         /* suffix */
+                storageDir      /* directory */
+        );
+
+        this.previousPicturePath = this.todo.photoPath;
+        this.todo.photoPath = image.getAbsolutePath();
+        return image;
+    }
+
+    private void updatePicture(){
+        if(this.todo.isPicture()){
+            File imgFile = new  File(this.todo.photoPath);
+            if(imgFile.exists()){
+                Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+                pictureViewer.setImageBitmap(myBitmap);
+            }else{
+                this.todo.photoPath=null;
+            }
+        }else{
+            pictureViewer.setImageDrawable(null);
+        }
     }
 }

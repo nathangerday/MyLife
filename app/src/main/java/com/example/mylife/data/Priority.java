@@ -1,4 +1,4 @@
-package com.example.mylife.utils;
+package com.example.mylife.data;
 
 public enum Priority {
     NONE,

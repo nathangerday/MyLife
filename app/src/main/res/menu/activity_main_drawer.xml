@@ -28,6 +28,14 @@
                 android:id="@+id/nav_backup"
                 android:icon="@drawable/ic_menu_send"
                 android:title="@string/menu_backup" />
+            <item
+                android:id="@+id/nav_backup_local"
+                android:icon="@drawable/ic_menu_send"
+                android:title="Backup locally" />
+            <item
+                android:id="@+id/nav_loadbak"
+                android:icon="@drawable/ic_menu_manage"
+                android:title="Load form backup" />
         </menu>
     </item>
 

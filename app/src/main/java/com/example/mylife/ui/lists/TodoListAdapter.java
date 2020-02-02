@@ -15,6 +15,7 @@ import com.example.mylife.R;
 import com.example.mylife.data.TodoList;
 import com.example.mylife.ui.todos.TodosActivity;
 import com.example.mylife.utils.ListItemWithBGViewHolder;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.List;
 
@@ -23,6 +24,10 @@ public class TodoListAdapter extends RecyclerView.Adapter<TodoListAdapter.ViewHo
 
     private final List<TodoList> lists;
     private final Context context;
+    private View parent = null;
+
+    private TodoList lastDeletedItem = null;
+    private int lastDeletedItemPosition;
 
     public static class ViewHolder extends RecyclerView.ViewHolder implements ListItemWithBGViewHolder {
         int position;
@@ -61,8 +66,24 @@ public class TodoListAdapter extends RecyclerView.Adapter<TodoListAdapter.ViewHo
     }
 
     public void removeItem(int position){
+        this.lastDeletedItem = this.lists.get(position);
+        this.lastDeletedItemPosition = position;
         this.lists.remove(position);
         notifyItemRemoved(position);
+        activateUndo();
+    }
+
+    private void activateUndo(){
+        Snackbar snackbar = Snackbar.make(parent, "\"" +lastDeletedItem.name + "\" deleted",
+                Snackbar.LENGTH_LONG);
+        snackbar.setAction("Undo", v -> undoRemove());
+        snackbar.show();
+    }
+
+    private void undoRemove(){
+        this.lists.add(lastDeletedItemPosition,
+                lastDeletedItem);
+        notifyItemInserted(lastDeletedItemPosition);
     }
 
     public void restoreItem(TodoList item, int position){
@@ -83,10 +104,12 @@ public class TodoListAdapter extends RecyclerView.Adapter<TodoListAdapter.ViewHo
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        this.parent = parent;
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item, parent, false);
         final ViewHolder vh = new ViewHolder(view);
         vh.view.setOnClickListener((v) -> {
             Intent intent = new Intent(context, TodosActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
             intent.putExtra("todo_index", vh.position);
             context.startActivity(intent);
         });
