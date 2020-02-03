@@ -30,6 +30,14 @@
 
         </com.google.android.material.appbar.AppBarLayout>
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Task Title"
+            android:layout_marginLeft="5dp"
+            android:textStyle="bold"
+            android:textSize="20sp" />
+
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -37,15 +45,53 @@
             android:textAlignment="center"
             android:id="@+id/todo_title"
             android:maxLines="1"
-            android:inputType="text"/>
+            android:inputType="text"
+            android:imeOptions="actionDone"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Task Description"
+            android:layout_marginLeft="5dp"
+            android:textStyle="bold"
+            android:textSize="20sp" />
 
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Enter details here..."
             android:id="@+id/todo_description"
-            android:inputType="textMultiLine" />
+            android:inputType="textMultiLine"
+            android:imeOptions="actionDone"/>
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Priority"
+            android:layout_marginLeft="5dp"
+            android:textStyle="bold"
+            android:textSize="20sp" />
+
+        <Spinner
+            android:id="@+id/priority_spinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:entries="@array/priorities"
+            android:layout_marginBottom="5dp"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@android:color/darker_gray"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Deadline"
+            android:layout_marginLeft="5dp"
+            android:textStyle="bold"
+            android:textSize="20sp" />
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -83,6 +129,19 @@
                     android:onClick="changeDeadline"></Button>
             </LinearLayout>
         </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@android:color/darker_gray"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Picture"
+            android:layout_marginLeft="5dp"
+            android:textStyle="bold"
+            android:textSize="20sp" />
 
         <RelativeLayout
             android:layout_width="match_parent"

@@ -1,6 +1,7 @@
 package com.example.mylife.ui.totodetail;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.NavUtils;
 import androidx.core.content.FileProvider;
 
@@ -22,16 +23,20 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
+import android.widget.AdapterView;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.example.mylife.R;
+import com.example.mylife.data.Priority;
 import com.example.mylife.data.Todo;
 import com.example.mylife.data.TodoList;
 import com.example.mylife.utils.AlarmReceiver;
@@ -44,7 +49,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
-public class TodoDetailActivity extends AppCompatActivity {
+public class TodoDetailActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
 
     static final int REQUEST_IMAGE_CAPTURE = 10;
 
@@ -57,6 +62,7 @@ public class TodoDetailActivity extends AppCompatActivity {
     private SimpleDateFormat sdf;
     private ImageView pictureViewer;
     private EditText description;
+    private Spinner priority;
     private View view;
 
     private String previousPicturePath;
@@ -65,7 +71,9 @@ public class TodoDetailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_todo_detail);
-
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         createNotificationChannel();
 
         sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
@@ -75,6 +83,7 @@ public class TodoDetailActivity extends AppCompatActivity {
         alarmtext = findViewById(R.id.deadline_display);
         pictureViewer = findViewById(R.id.picture_viewer);
         description = findViewById(R.id.todo_description);
+        priority = findViewById(R.id.priority_spinner);
 
 
 
@@ -95,14 +104,60 @@ public class TodoDetailActivity extends AppCompatActivity {
         if(todo.isDeadline()){
             alarmtext.setText(sdf.format(todo.getDeadline().getTime()));
         }
-
+        setTitle(todo.name);
         todotitle.setText(todo.name);
         description.setText(todo.description);
-
+        priority.setOnItemSelectedListener(this);
+        switch (this.todo.priority){
+            case NONE:
+                priority.setSelection(0);
+                break;
+            case HIGH:
+                priority.setSelection(1);
+                break;
+            case MEDIUM:
+                priority.setSelection(2);
+                break;
+            case LOW:
+                priority.setSelection(3);
+                break;
+        }
         updatePicture();
 
         setAllListener();
 
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        switch (position){
+            case 0:
+                this.todo.priority = Priority.NONE;
+                break;
+            case 1:
+                this.todo.priority = Priority.HIGH;
+                break;
+            case 2:
+                this.todo.priority = Priority.MEDIUM;
+                break;
+            case 3:
+                this.todo.priority = Priority.LOW;
+                break;
+        }
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        if(item.getItemId() == android.R.id.home){
+            setResult(RESULT_OK);
+            finish();
+        }
+        return true;
     }
 
     public void changeDeadline(View view){
@@ -265,6 +320,7 @@ public class TodoDetailActivity extends AppCompatActivity {
         todotitle.setOnEditorActionListener((v, actionId, event) -> {
             if ((event != null && (event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) || (actionId == EditorInfo.IME_ACTION_DONE)) {
                 todo.name = todotitle.getText().toString();
+                setTitle(todo.name);
                 todotitle.clearFocus();
             }
             return false;

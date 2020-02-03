@@ -80,8 +80,6 @@ public class AddTodoDialog extends AppCompatDialogFragment implements AdapterVie
         });
 
         Spinner spinner = view.findViewById(R.id.priority_spinner);
-        ArrayList<String> priorities_list = new ArrayList<>();
-        //spinner.setAdapter(new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, priorities_list));
         spinner.setOnItemSelectedListener(this);
 
         newTodoName = view.findViewById(R.id.edit_todo_name);
