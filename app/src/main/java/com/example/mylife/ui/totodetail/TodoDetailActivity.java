@@ -52,10 +52,12 @@ public class TodoDetailActivity extends AppCompatActivity {
     private TodoList parent = null;
     private PendingIntent pendingIntent;
     private AlarmManager alarmManager;
+    private EditText todotitle;
     private TextView alarmtext;
     private SimpleDateFormat sdf;
     private ImageView pictureViewer;
     private EditText description;
+    private View view;
 
     private String previousPicturePath;
 
@@ -67,9 +69,14 @@ public class TodoDetailActivity extends AppCompatActivity {
         createNotificationChannel();
 
         sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
-
-
         alarmManager = (AlarmManager)getSystemService(ALARM_SERVICE);
+        view = findViewById(R.id.todo_detail_layout);
+        todotitle = findViewById(R.id.todo_title);
+        alarmtext = findViewById(R.id.deadline_display);
+        pictureViewer = findViewById(R.id.picture_viewer);
+        description = findViewById(R.id.todo_description);
+
+
 
         Bundle extras = getIntent().getExtras();
         if(extras != null){
@@ -82,50 +89,19 @@ public class TodoDetailActivity extends AppCompatActivity {
             }
             todo = parent.todolist.get(extras.getInt("todo_index"));
         }else{
-            Log.v("TodosActivity", "Error, no TodoList associated");
             NavUtils.navigateUpFromSameTask(this);
         }
 
-        EditText todotitle = findViewById(R.id.todo_title);
-        alarmtext = findViewById(R.id.deadline_display);
         if(todo.isDeadline()){
             alarmtext.setText(sdf.format(todo.getDeadline().getTime()));
         }
 
-
-        todotitle.setOnEditorActionListener((v, actionId, event) -> {
-            if ((event != null && (event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) || (actionId == EditorInfo.IME_ACTION_DONE)) {
-                todo.name = todotitle.getText().toString();
-                todotitle.clearFocus();
-            }
-            return false;
-        });
         todotitle.setText(todo.name);
-
-        pictureViewer = findViewById(R.id.picture_viewer);
+        description.setText(todo.description);
 
         updatePicture();
 
-        pictureViewer.setOnClickListener(v -> {
-            if(this.todo.isPicture()){
-                File file = new File(this.todo.photoPath);
-                final Intent intent = new Intent(Intent.ACTION_VIEW)//
-                        .setDataAndType(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N ?
-                                        FileProvider.getUriForFile(this,"com.example.android.fileprovider", file) : Uri.fromFile(file),
-                                "image/*").addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                startActivity(intent);
-            }
-        });
-
-        description = findViewById(R.id.todo_description);
-
-        description.setOnEditorActionListener((v, actionId, event) -> {
-            if ((event != null && (event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) || (actionId == EditorInfo.IME_ACTION_DONE)) {
-                todo.description = description.getText().toString();
-                description.clearFocus();
-            }
-            return false;
-        });
+        setAllListener();
 
     }
 
@@ -283,5 +259,52 @@ public class TodoDetailActivity extends AppCompatActivity {
         }else{
             pictureViewer.setImageDrawable(null);
         }
+    }
+
+    private void setAllListener(){
+        todotitle.setOnEditorActionListener((v, actionId, event) -> {
+            if ((event != null && (event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) || (actionId == EditorInfo.IME_ACTION_DONE)) {
+                todo.name = todotitle.getText().toString();
+                todotitle.clearFocus();
+            }
+            return false;
+        });
+
+        pictureViewer.setOnClickListener(v -> {
+            if(this.todo.isPicture()){
+                File file = new File(this.todo.photoPath);
+                final Intent intent = new Intent(Intent.ACTION_VIEW)//
+                        .setDataAndType(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N ?
+                                        FileProvider.getUriForFile(this,"com.example.android.fileprovider", file) : Uri.fromFile(file),
+                                "image/*").addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                startActivity(intent);
+            }
+        });
+
+        description.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                todo.description = s.toString();
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        view.setOnTouchListener((v, event) -> {
+            if(description.hasFocus()){
+                description.clearFocus();
+            }else if(todotitle.hasFocus()){
+                todotitle.clearFocus();
+            }
+            return false;
+        });
     }
 }

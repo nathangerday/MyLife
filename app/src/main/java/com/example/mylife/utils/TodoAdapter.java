@@ -34,18 +34,26 @@ public class TodoAdapter extends RecyclerView.Adapter<TodoAdapter.ViewHolder> {
     private int lastDeletedItemPosition;
     private View parent = null;
 
+    private boolean displayListName;
+
 
     public static class ViewHolder extends RecyclerView.ViewHolder implements ListItemWithBGViewHolder{
         int position;
         public TextView name;
+        public TextView parent;
         public CheckBox checkbox;
         public RelativeLayout foreground, background;
         public View view;
 
-        public ViewHolder(View v) {
+        public ViewHolder(View v, boolean displayListName) {
             super(v);
             this.view = v;
             this.name = v.findViewById(R.id.todo_name);
+            if(displayListName){
+                this.parent = v.findViewById(R.id.todo_parent);
+            }else{
+                this.parent = null;
+            }
             this.checkbox = v.findViewById(R.id.checkbox);
             this.foreground = v.findViewById(R.id.todo_item_foreground);
             this.background = v.findViewById(R.id.todo_item_background);
@@ -64,8 +72,13 @@ public class TodoAdapter extends RecyclerView.Adapter<TodoAdapter.ViewHolder> {
 
 
     public TodoAdapter(@NonNull List<Todo> todos, Context context) {
+        this(todos, context, false);
+    }
+
+    public TodoAdapter(@NonNull List<Todo> todos, Context context, boolean displayListName){
         this.todos = todos;
         this.context = context;
+        this.displayListName = displayListName;
     }
 
     @Override
@@ -100,6 +113,9 @@ public class TodoAdapter extends RecyclerView.Adapter<TodoAdapter.ViewHolder> {
 
         holder.position = position;
         holder.name.setText(todo.name);
+        if(this.displayListName){
+            holder.parent.setText(todo.parentList.name);
+        }
         holder.checkbox.setChecked(todo.done);
         if (todo.done){
             holder.name.setPaintFlags(Paint.STRIKE_THRU_TEXT_FLAG);
@@ -114,15 +130,17 @@ public class TodoAdapter extends RecyclerView.Adapter<TodoAdapter.ViewHolder> {
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         this.parent = parent;
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.todo_item, parent, false);
-        final ViewHolder vh = new ViewHolder(view);
-        vh.checkbox.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Todo t = get(vh.position);
-                t.done = !t.done;
-                notifyDataSetChanged();
-            }
+        View view;
+        if(this.displayListName){
+            view = LayoutInflater.from(parent.getContext()).inflate(R.layout.todo_item_with_parent, parent, false);
+        }else{
+            view = LayoutInflater.from(parent.getContext()).inflate(R.layout.todo_item, parent, false);
+        }
+        final ViewHolder vh = new ViewHolder(view, displayListName);
+        vh.checkbox.setOnClickListener(v -> {
+            Todo t = get(vh.position);
+            t.done = !t.done;
+            notifyDataSetChanged();
         });
         vh.view.setOnClickListener((v) -> {
             Intent intent = new Intent(context, TodoDetailActivity.class);

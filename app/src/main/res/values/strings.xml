@@ -22,6 +22,8 @@
     <string name="menu_backup">Send Backup</string>
     <string name="menu_backup_local">Local Backup</string>
     <string name="menu_load_backup">Load Backup</string>
+    <string name="menu_filter_urgent">Urgent</string>
+    <string name="menu_filter_missed">Missed</string>
     <string-array name="priorities">
         <item>None</item>
         <item>High</item>

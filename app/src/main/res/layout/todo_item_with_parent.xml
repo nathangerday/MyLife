@@ -26,8 +26,7 @@
         android:layout_height="50dp"
         android:layout_centerVertical="true"
         android:id="@+id/todo_item_foreground"
-        android:background="@android:color/white"
-        android:gravity="center_vertical">
+        android:background="@android:color/white">
 
         <CheckBox
             android:id="@+id/checkbox"
@@ -43,10 +42,18 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_toRightOf="@id/checkbox"
-            android:layout_centerVertical="true"
             android:text="Name"
             android:textSize="20dp"></TextView>
 
+        <TextView
+            android:id="@+id/todo_parent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/todo_name"
+            android:layout_toRightOf="@id/checkbox"
+            android:textSize="12sp"
+            android:textStyle="italic"
+            android:text="Parent"/>
 
     </RelativeLayout>
 

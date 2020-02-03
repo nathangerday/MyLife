@@ -31,18 +31,18 @@ public class AlarmReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
 
-        Uri alarmUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
-        if (alarmUri == null) {
-            alarmUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-        }
-        Ringtone ringtone = RingtoneManager.getRingtone(context, alarmUri);
-        ringtone.play();
+//        Uri alarmUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
+//        if (alarmUri == null) {
+//            alarmUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+//        }
+//        Ringtone ringtone = RingtoneManager.getRingtone(context, alarmUri);
+//        ringtone.play();
 
         String todoName = intent.getExtras().getString("todo_name");
         String todolistName = intent.getExtras().getString("todolist_name");
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_ID)
-                .setSmallIcon(R.drawable.ic_launcher_foreground)
+                .setSmallIcon(R.drawable.ic_list)
                 .setContentTitle("Deadline")
                 .setContentText("\""+todoName+"\""+" from \""+todolistName+"\"")
                 .setStyle(new NotificationCompat.BigTextStyle()

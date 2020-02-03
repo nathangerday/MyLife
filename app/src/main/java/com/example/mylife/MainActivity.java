@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.example.mylife.ui.filter.FilterFragment;
+import com.example.mylife.ui.filter.FilterMissedFragment;
+import com.example.mylife.ui.filter.FilterUrgentFragment;
 import com.example.mylife.ui.lists.AddListDialog;
 import com.example.mylife.ui.lists.ListsFragment;
 import com.example.mylife.utils.AppStateManager;
@@ -104,6 +106,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 args3.putInt("priority", Priority.LOW.ordinal());
                 filter_low.setArguments(args3);
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, filter_low).commit();
+                break;
+            case R.id.nav_filter_urgent:
+                FilterUrgentFragment filter_urgent = new FilterUrgentFragment();
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, filter_urgent).commit();
+                break;
+            case R.id.nav_filter_missed:
+                FilterMissedFragment filter_missed = new FilterMissedFragment();
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, filter_missed).commit();
                 break;
             case R.id.nav_backup:
                 AppStateManager.backupAndSendMail(this);
