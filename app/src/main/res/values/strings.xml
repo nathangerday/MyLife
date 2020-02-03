@@ -2,8 +2,8 @@
     <string name="app_name">MyLife</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="nav_header_title">Android Studio</string>
-    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_title">MyLife</string>
+    <string name="nav_header_subtitle">nat.gerday@gmail.com</string>
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
 
@@ -11,7 +11,6 @@
     <string name="menu_filter_high">High priority</string>
     <string name="menu_filter_medium">Medium priority</string>
     <string name="menu_filter_low">Low priority</string>
-    <string name="menu_backup">Backup</string>
 
     <string name="new_list_hint">Enter your list name</string>
     <string name="new_todo_hint">Enter your task name</string>
@@ -19,6 +18,10 @@
     <string name="no_alarm">No deadline set</string>
 
     <string name="title_activity_todos">TodosActivity</string>
+
+    <string name="menu_backup">Send Backup</string>
+    <string name="menu_backup_local">Local Backup</string>
+    <string name="menu_load_backup">Load Backup</string>
     <string-array name="priorities">
         <item>None</item>
         <item>High</item>
