@@ -48,7 +48,7 @@ public class FilterUrgentFragment extends Fragment{
         ArrayList<Todo> todoWithPriority = new ArrayList<Todo>();
         for(TodoList tl : this.list){
             for(Todo t: tl.todolist){
-                if(TimeUnit.MILLISECONDS.toHours(t.deadline - System.currentTimeMillis()) <= 24 && !t.done){
+                if(t.isDeadline() && TimeUnit.MILLISECONDS.toHours(t.deadline - System.currentTimeMillis()) <= 24 && !t.done){
                     todoWithPriority.add(t);
                 }
             }

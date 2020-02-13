@@ -12,6 +12,7 @@ import com.example.mylife.data.Priority;
 import com.example.mylife.utils.TodoAdapter;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.NavUtils;
@@ -22,16 +23,27 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.mylife.R;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class TodosActivity extends AppCompatActivity implements AddTodoDialog.AddTodoDialogListener, ListsTouchHelper.ListsTouchHelperListener {
 
     private TodoList todos;
     private int todo_index;
     private TodoAdapter adapter;
+    private Button quickAddButton;
+    private EditText quickAddEditText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +62,10 @@ public class TodosActivity extends AppCompatActivity implements AddTodoDialog.Ad
             NavUtils.navigateUpFromSameTask(this);
         }
         setTitle(todos.name);
+
+
+        quickAddButton = findViewById(R.id.quick_add_todo_button);
+        quickAddEditText = findViewById(R.id.quick_add_todo_text);
 
         RecyclerView rv = findViewById(R.id.todosView);
         rv.setLayoutManager(new LinearLayoutManager(this));
@@ -71,6 +87,14 @@ public class TodosActivity extends AppCompatActivity implements AddTodoDialog.Ad
             public void onClick(View view) {
                 openDialog();
             }
+        });
+
+        quickAddEditText.setOnEditorActionListener((v, actionId, event) -> {
+            if(actionId == EditorInfo.IME_ACTION_DONE){
+                createTodo(quickAddEditText.getText().toString(), Priority.NONE);
+                quickAddEditText.getText().clear();
+            }
+            return true;
         });
     }
 
@@ -104,7 +128,11 @@ public class TodosActivity extends AppCompatActivity implements AddTodoDialog.Ad
             adapter.notifyDataSetChanged();
         }
 
+    }
 
+    public void quickAdd(View v){
+        createTodo(quickAddEditText.getText().toString(), Priority.NONE);
+        quickAddEditText.getText().clear();
     }
 
     @Override
@@ -112,5 +140,34 @@ public class TodosActivity extends AppCompatActivity implements AddTodoDialog.Ad
         super.onPause();
 
         AppStateManager.saveData(this);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.activity_todos, menu);
+
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.delete_marked:
+                deleteMarkedTasks();
+                break;
+        }
+        return true;
+    }
+
+    private void deleteMarkedTasks(){
+        List<Todo> toDelete = new ArrayList<>();
+        for(Todo t : todos.todolist){
+            if(t.done){
+                toDelete.add(t);
+            }
+        }
+        todos.todolist.removeAll(toDelete);
+        adapter.notifyDataSetChanged();
     }
 }

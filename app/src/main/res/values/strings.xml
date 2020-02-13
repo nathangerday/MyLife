@@ -24,6 +24,8 @@
     <string name="menu_load_backup">Load Backup</string>
     <string name="menu_filter_urgent">Urgent</string>
     <string name="menu_filter_missed">Missed</string>
+    <string name="quick_add_hint">Quick add todo</string>
+    <string name="delete_marked">Delete marked tasks</string>
     <string-array name="priorities">
         <item>None</item>
         <item>High</item>

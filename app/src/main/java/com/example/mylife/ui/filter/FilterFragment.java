@@ -51,7 +51,7 @@ public class FilterFragment extends Fragment{
         ArrayList<Todo> todoWithPriority = new ArrayList<Todo>();
         for(TodoList tl : this.list){
             for(Todo t: tl.todolist){
-                if(t.priority == this.priority){
+                if(t.priority == this.priority && !t.done){
                     todoWithPriority.add(t);
                 }
             }

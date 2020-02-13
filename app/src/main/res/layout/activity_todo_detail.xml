@@ -45,7 +45,7 @@
             android:textAlignment="center"
             android:id="@+id/todo_title"
             android:maxLines="1"
-            android:inputType="text"
+            android:inputType="textCapSentences"
             android:imeOptions="actionDone"/>
 
         <TextView
@@ -61,7 +61,7 @@
             android:layout_height="wrap_content"
             android:hint="Enter details here..."
             android:id="@+id/todo_description"
-            android:inputType="textMultiLine"
+            android:inputType="textCapSentences"
             android:imeOptions="actionDone"/>
 
         <TextView
