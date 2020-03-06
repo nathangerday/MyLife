@@ -156,9 +156,12 @@ public class TodosActivity extends AppCompatActivity implements AddTodoDialog.Ad
             case R.id.delete_marked:
                 deleteMarkedTasks();
                 break;
+            default:
+                return super.onOptionsItemSelected(item);
         }
         return true;
     }
+
 
     private void deleteMarkedTasks(){
         List<Todo> toDelete = new ArrayList<>();

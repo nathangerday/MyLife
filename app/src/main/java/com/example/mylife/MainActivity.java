@@ -8,6 +8,7 @@ import com.example.mylife.ui.filter.FilterMissedFragment;
 import com.example.mylife.ui.filter.FilterUrgentFragment;
 import com.example.mylife.ui.lists.AddListDialog;
 import com.example.mylife.ui.lists.ListsFragment;
+import com.example.mylife.ui.tasks.TaskFragment;
 import com.example.mylife.utils.AppStateManager;
 import com.example.mylife.data.Priority;
 import com.google.android.material.snackbar.Snackbar;
@@ -83,6 +84,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         switch(menuItem.getItemId()){
+            case R.id.nav_tasks:
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new TaskFragment()).commit();
+                break;
             case R.id.nav_lists:
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ListsFragment()).commit();
                 break;
@@ -130,9 +134,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     @Override
-    public void createList(String name) {
+    public void createList(String name, int color) {
         ListsFragment lf = (ListsFragment)getSupportFragmentManager().findFragmentById(R.id.fragment_container);
-        lf.createList(name);
+        lf.createList(name, color);
     }
 
     @Override

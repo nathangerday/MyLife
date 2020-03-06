@@ -79,9 +79,9 @@ public class ListsFragment extends Fragment implements ListsTouchHelper.ListsTou
         addListDialog.show(getActivity().getSupportFragmentManager(), "New List Dialog");
     }
 
-    public void createList(String name) {
+    public void createList(String name, int color) {
         Toast.makeText(getActivity(), "\"" + name + "\" created !", Toast.LENGTH_SHORT).show();
-        list.add(new TodoList(name));
+        list.add(new TodoList(name, color));
         adapter.notifyItemInserted(list.size() - 1);
     }
 

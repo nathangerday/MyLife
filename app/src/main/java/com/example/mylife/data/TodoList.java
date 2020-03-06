@@ -7,9 +7,11 @@ import java.util.List;
 public class TodoList implements Serializable {
     public String name;
     public List<Todo> todolist;
+    public int color;
 
-    public TodoList(String name){
+    public TodoList(String name, int color){
         this.name = name;
+        this.color = color;
         this.todolist = new ArrayList<>();
     }
 

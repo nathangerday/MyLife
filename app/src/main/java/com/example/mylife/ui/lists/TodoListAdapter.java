@@ -97,6 +97,7 @@ public class TodoListAdapter extends RecyclerView.Adapter<TodoListAdapter.ViewHo
 
         holder.position = position;
         holder.name.setText(list.name);
+        holder.foreground.setBackgroundColor(list.color);
 
 
     }
@@ -105,7 +106,7 @@ public class TodoListAdapter extends RecyclerView.Adapter<TodoListAdapter.ViewHo
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         this.parent = parent;
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_list, parent, false);
         final ViewHolder vh = new ViewHolder(view);
         vh.view.setOnClickListener((v) -> {
             Intent intent = new Intent(context, TodosActivity.class);

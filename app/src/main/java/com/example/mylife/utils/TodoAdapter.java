@@ -10,15 +10,12 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.mylife.R;
 import com.example.mylife.data.Todo;
-import com.example.mylife.data.TodoList;
-import com.example.mylife.ui.todos.TodosActivity;
 import com.example.mylife.ui.totodetail.TodoDetailActivity;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -44,6 +41,7 @@ public class TodoAdapter extends RecyclerView.Adapter<TodoAdapter.ViewHolder> {
         public CheckBox checkbox;
         public RelativeLayout foreground, background;
         public View view;
+        public View colorIndicator;
 
         public ViewHolder(View v, boolean displayListName) {
             super(v);
@@ -51,6 +49,7 @@ public class TodoAdapter extends RecyclerView.Adapter<TodoAdapter.ViewHolder> {
             this.name = v.findViewById(R.id.todo_name);
             if(displayListName){
                 this.parent = v.findViewById(R.id.todo_parent);
+                this.colorIndicator = v.findViewById(R.id.todo_item_foreground);
             }else{
                 this.parent = null;
             }
@@ -114,6 +113,7 @@ public class TodoAdapter extends RecyclerView.Adapter<TodoAdapter.ViewHolder> {
         holder.position = position;
         holder.name.setText(todo.name);
         if(this.displayListName){
+            holder.colorIndicator.setBackgroundColor(todo.parentList.color);
             holder.parent.setText(todo.parentList.name);
         }
         holder.checkbox.setChecked(todo.done);
@@ -132,9 +132,10 @@ public class TodoAdapter extends RecyclerView.Adapter<TodoAdapter.ViewHolder> {
         this.parent = parent;
         View view;
         if(this.displayListName){
-            view = LayoutInflater.from(parent.getContext()).inflate(R.layout.todo_item_with_parent, parent, false);
+            view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_todo_with_parent, parent, false);
+
         }else{
-            view = LayoutInflater.from(parent.getContext()).inflate(R.layout.todo_item, parent, false);
+            view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_todo, parent, false);
         }
         final ViewHolder vh = new ViewHolder(view, displayListName);
         vh.checkbox.setOnClickListener(v -> {

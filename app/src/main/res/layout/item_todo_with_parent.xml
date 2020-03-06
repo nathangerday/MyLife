@@ -2,7 +2,8 @@
 
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_height="wrap_content"
-    android:layout_width="match_parent">
+    android:layout_width="match_parent"
+    android:id="@+id/frame_todo_parent">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -54,6 +55,14 @@
             android:textSize="12sp"
             android:textStyle="italic"
             android:text="Parent"/>
+        
+        <View
+            android:layout_alignParentRight="true"
+            android:layout_width="10dp"
+            android:layout_height="match_parent"
+            android:id="@+id/color_indicator"
+            android:background="#DDDDDD"
+            android:visibility="visible" />
 
     </RelativeLayout>
 

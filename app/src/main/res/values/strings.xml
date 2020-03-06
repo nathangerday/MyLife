@@ -26,6 +26,9 @@
     <string name="menu_filter_missed">Missed</string>
     <string name="quick_add_hint">Quick add todo</string>
     <string name="delete_marked">Delete marked tasks</string>
+    <string name="menu_tasks">Tasks</string>
+    <string name="confirm">Confirm</string>
+    <string name="cancel">Cancel</string>
     <string-array name="priorities">
         <item>None</item>
         <item>High</item>
