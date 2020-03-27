@@ -111,6 +111,11 @@ public class TodosActivity extends AppCompatActivity implements AddTodoDialog.Ad
         }
     }
 
+    @Override
+    public boolean onMoved(RecyclerView.ViewHolder viewHolder, int oldPosition, int newPosition) {
+        return false;
+    }
+
     public void openDialog(){
         AddTodoDialog addTodoDialog = new AddTodoDialog();
         addTodoDialog.show(getSupportFragmentManager(), "New Todo Dialog");

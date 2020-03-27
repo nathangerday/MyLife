@@ -46,7 +46,7 @@ public class ListsFragment extends Fragment implements ListsTouchHelper.ListsTou
         adapter = new TodoListAdapter(list, getActivity());
         rv.setAdapter(adapter);
 
-        ItemTouchHelper.SimpleCallback itemTouchHelperCallback = new ListsTouchHelper<TodoAdapter.ViewHolder>(0, ItemTouchHelper.LEFT, this);
+        ItemTouchHelper.SimpleCallback itemTouchHelperCallback = new ListsTouchHelper<TodoAdapter.ViewHolder>(ItemTouchHelper.UP | ItemTouchHelper.DOWN, ItemTouchHelper.LEFT, this);
         new ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(rv);
 
         FloatingActionButton fab = root.findViewById(R.id.fab);
@@ -72,6 +72,11 @@ public class ListsFragment extends Fragment implements ListsTouchHelper.ListsTou
             this.adapter.removeItem(viewHolder.getAdapterPosition());
 
         }
+    }
+
+    @Override
+    public boolean onMoved(RecyclerView.ViewHolder viewHolder, int oldPosition, int newPosition) {
+        return false;
     }
 
     public void openDialog(){

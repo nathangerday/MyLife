@@ -20,7 +20,7 @@ public class ListsTouchHelper<CustomViewHolder extends ListItemWithBGViewHolder>
 
     @Override
     public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
-        return true;
+        return listener.onMoved(viewHolder, viewHolder.getAdapterPosition(), target.getAdapterPosition());
     }
 
     @Override
@@ -69,5 +69,6 @@ public class ListsTouchHelper<CustomViewHolder extends ListItemWithBGViewHolder>
 
     public  interface  ListsTouchHelperListener{
         void onSwiped(RecyclerView.ViewHolder viewHolder, int direction, int position);
+        boolean onMoved(RecyclerView.ViewHolder viewHolder, int oldPosition, int newPosition);
     }
 }
